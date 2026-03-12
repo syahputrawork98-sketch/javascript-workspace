@@ -30,3 +30,9 @@ javascript-workspace/
 - `packages/ui` hanya berisi komponen presentasional yang bisa dipakai lintas app.
 - Integrasi Learning Hub mengikuti struktur v2: `rak (Rxx) -> buku (Bxx) -> materi`.
 - Arsip `v1` dibaca lewat katalog terpisah dan diekspos pada route `/legacy`.
+
+## UI Direction
+
+- Workspace diarahkan menjadi reader layer `JavaScript Focuspace` untuk `JavaScript Learning Hub`.
+- Jalur utama UX berfokus pada `V2`, sedangkan `V1` diposisikan sebagai arsip.
+- Target pengalaman baca dan wireframe halaman ada di `docs/focuspace-v2-reader-wireframe.md`.

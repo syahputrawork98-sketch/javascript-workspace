@@ -20,9 +20,9 @@ export async function generateMetadata({ params }) {
   const book = getBookBySlugs(rackId, bookId);
   const currentSection = book ? getSectionFromBook(book, section) : null;
 
-  if (!book || !currentSection) return { title: "Section Tidak Ditemukan | JavaScript Workspace" };
+  if (!book || !currentSection) return { title: "Section Tidak Ditemukan | JavaScript Focuspace" };
 
-  return { title: `${currentSection.title} | ${book.title} | JavaScript Workspace` };
+  return { title: `${currentSection.title} | ${book.title} | JavaScript Focuspace` };
 }
 
 export default async function BookSectionPage({ params }) {

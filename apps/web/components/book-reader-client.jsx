@@ -16,44 +16,57 @@ export default function BookReaderClient({ backHref, backLabel, book, selectedMa
     book.materials.find((material) => material.id === selectedMaterialId) || book.materials[0];
 
   return (
-    <div className="grid grid-cols-[240px_minmax(0,1fr)] gap-6">
-      <section className="border border-slate-300 bg-white p-4">
-        <p className="mb-3 text-center text-xl font-medium text-slate-700">bab</p>
-        <nav className="flex flex-col gap-1.5">
-          {book.materials.map((material, index) => {
-            const active = material.id === selectedMaterial.id;
-            return (
-              <Link
-                key={material.id}
-                href={`${backHref}/${book.id}?material=${material.id}`}
-                className={[
-                  "rounded px-2 py-2 text-sm transition-colors",
-                  active ? "bg-slate-900 text-white" : "text-slate-700 hover:bg-slate-100",
-                ].join(" ")}
-              >
-                <p>
-                  {material.code} - {material.title}
-                </p>
-                <p className={active ? "text-xs uppercase text-slate-300" : "text-xs uppercase text-slate-500"}>
-                  {materialTypeLabel(material.type)} / urutan {material.order || index + 1}
-                </p>
-              </Link>
-            );
-          })}
-        </nav>
-      </section>
+    <div className="grid gap-6 xl:grid-cols-[280px_minmax(0,1fr)]">
+      <aside className="xl:sticky xl:top-20 xl:self-start">
+        <section className="rounded-[1.6rem] border border-[#d8ddd2] bg-[#fbfaf5] p-5 shadow-[0_10px_28px_rgba(15,23,42,0.04)]">
+          <div className="border-b border-[#e3e7dc] pb-4">
+            <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Arsip v1</p>
+            <h2 className="mt-2 text-xl font-semibold tracking-tight text-slate-900">{book.title}</h2>
+            <p className="mt-2 text-sm leading-7 text-slate-600">
+              Struktur lama tetap dipertahankan sebagai arsip referensi dan evolusi pembelajaran.
+            </p>
+          </div>
 
-      <section className="border border-slate-300 bg-white p-6">
-        <p className="mb-2 text-center text-xl font-medium text-slate-900">penjelasan</p>
-        <p className="mb-1 text-sm uppercase tracking-wide text-slate-500">{materialTypeLabel(selectedMaterial.type)}</p>
-        <h2 className="mb-1 text-2xl font-medium text-slate-900">{selectedMaterial.title}</h2>
-        <p className="mb-1 text-sm text-slate-600">{selectedMaterial.code}</p>
-        <p className="mb-4 text-sm leading-7 text-slate-700">{selectedMaterial.summary}</p>
-        <p className="mb-5 text-sm text-slate-500">Sumber: {selectedMaterial.sourcePath}</p>
+          <nav className="mt-5 flex max-h-[420px] flex-col gap-2 overflow-y-auto pr-1">
+            {book.materials.map((material, index) => {
+              const active = material.id === selectedMaterial.id;
+              return (
+                <Link
+                  key={material.id}
+                  href={`${backHref}/${book.id}?material=${material.id}`}
+                  className={[
+                    "rounded-[1rem] border px-3 py-3 text-sm transition-colors",
+                    active
+                      ? "border-slate-900 bg-slate-900 text-white"
+                      : "border-[#e4e8de] bg-white text-slate-700 hover:bg-slate-50",
+                  ].join(" ")}
+                >
+                  <div className="text-xs uppercase tracking-[0.16em] opacity-70">{material.code}</div>
+                  <div className="mt-1 font-medium">{material.title}</div>
+                  <div className={active ? "mt-2 text-xs uppercase text-slate-300" : "mt-2 text-xs uppercase text-slate-500"}>
+                    {materialTypeLabel(material.type)} / urutan {material.order || index + 1}
+                  </div>
+                </Link>
+              );
+            })}
+          </nav>
+        </section>
+      </aside>
 
-        <article className="reader-prose">{renderMarkdownToElements(markdown)}</article>
+      <section className="rounded-[1.8rem] border border-[#d8ddd2] bg-white p-6 shadow-[0_12px_32px_rgba(15,23,42,0.05)] md:p-8">
+        <div className="border-b border-[#e6eadf] pb-5">
+          <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Legacy Reader</p>
+          <p className="mt-3 text-sm uppercase tracking-[0.14em] text-slate-500">{materialTypeLabel(selectedMaterial.type)}</p>
+          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{selectedMaterial.title}</h1>
+          <p className="mt-2 text-sm text-slate-500">{selectedMaterial.code}</p>
+          <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-700">{selectedMaterial.summary}</p>
+        </div>
 
-        <div className="mt-8">
+        <div className="mt-6 rounded-[1.4rem] border border-[#e7ebe2] bg-[#fffefb] px-5 py-6 md:px-8 md:py-8">
+          <article className="reader-prose focuspace-prose mx-auto">{renderMarkdownToElements(markdown)}</article>
+        </div>
+
+        <div className="mt-8 flex flex-wrap gap-3">
           <Button asChild variant="outline">
             <Link href={backHref}>{backLabel}</Link>
           </Button>
