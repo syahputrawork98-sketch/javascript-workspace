@@ -38,8 +38,10 @@ function collectMaterials(hubRoot, bookDirName) {
   return files.map((fileName) => {
     const fileAbsolutePath = path.join(contentAbsolutePath, fileName);
     const type = MATERIAL_TYPE_BY_DIR[contentDirName] || "topic";
+    const slug = path.basename(fileName, ".md");
     return {
-      id: path.basename(fileName, ".md"),
+      id: slug,
+      slug,
       code: inferMaterialCode(fileName, type),
       order: inferMaterialOrder(fileName),
       title: extractMaterialTitle(fileAbsolutePath, fileName),
@@ -67,12 +69,15 @@ function collectBook(hubRoot, bookDirName) {
 
   return {
     id: `v1-${bookDirName}`,
+    slug: bookDirName,
     rack: {
       id: LEGACY_DIRECTORY,
+      slug: LEGACY_DIRECTORY,
       code: "v1",
       title: "Arsip Learning Hub v1",
       summary: "Katalog versi lama yang dipertahankan sebagai arsip pembelajaran.",
       sourcePath: LEGACY_DIRECTORY,
+      readmePath: `${LEGACY_DIRECTORY}/README.md`,
     },
     code: code || "00",
     title,

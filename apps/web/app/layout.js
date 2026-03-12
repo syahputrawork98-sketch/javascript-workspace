@@ -19,10 +19,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+    <html lang="id">
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <div className="min-h-screen">
           <header className="border-b border-slate-200/80 bg-[#fffdf8]/90 backdrop-blur">
             <div className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between px-4 md:px-6">
@@ -33,10 +31,16 @@ export default function RootLayout({ children }) {
                 <Link href="/" className="rounded-lg px-3 py-1.5 text-slate-600 hover:bg-slate-100 hover:text-slate-900">
                   Home
                 </Link>
-                <Link href="/books" className="rounded-lg px-3 py-1.5 text-slate-600 hover:bg-slate-100 hover:text-slate-900">
-                  v2
+                <Link
+                  href="/racks"
+                  className="rounded-lg px-3 py-1.5 text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                >
+                  Rak v2
                 </Link>
-                <Link href="/legacy" className="rounded-lg px-3 py-1.5 text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+                <Link
+                  href="/legacy"
+                  className="rounded-lg px-3 py-1.5 text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                >
                   v1
                 </Link>
               </nav>

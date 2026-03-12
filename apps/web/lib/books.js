@@ -1,1 +1,1 @@
-export { libraryBooks as books, getLibraryBookById as getBookById } from "./racks";
+export { libraryBooks as books, getBookByLegacyId as getBookById } from "./library";

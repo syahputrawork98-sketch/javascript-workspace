@@ -1,125 +1,115 @@
 import Link from "next/link";
 import { Button } from "@javascript-workspace/ui";
 import { archiveBooks } from "@/lib/archive";
-import { libraryBooks } from "@/lib/racks";
+import { libraryBooks, libraryRacks, libraryRoot } from "@/lib/library";
+import { loadLibraryText } from "@/lib/learning-hub-content";
+import { renderMarkdownToElements } from "@/lib/markdown-renderer";
 
-const learningReasons = [
-  "Bagaimana kode JavaScript dieksekusi.",
-  "Bagaimana Execution Context bekerja.",
-  "Bagaimana Lexical Environment terbentuk.",
-  "Bagaimana Event Loop menjalankan asynchronous code.",
-  "Bagaimana Prototype Chain membentuk object system.",
-  "Bagaimana nilai dan reference disimpan di memory.",
-  "Bagaimana JavaScript engine mengeksekusi program.",
-];
-
-export default function Home() {
-  const totalMaterials = libraryBooks.reduce((acc, book) => acc + book.materials.length, 0);
-  const totalRacks = new Set(libraryBooks.map((book) => book.rack.id)).size;
+export default async function Home() {
+  const rootMarkdown = await loadLibraryText(libraryRoot.readmePath, "# Library belum tersedia");
+  const totalItems = libraryBooks.reduce((acc, book) => acc + book.items.length, 0);
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-6xl flex-col gap-8 px-6 py-14">
-      <section className="border border-slate-300 bg-white p-5">
-        <p className="text-sm text-slate-500">JavaScript Workspace</p>
-        <h1 className="mt-1 text-2xl font-medium text-slate-900">
-          Platform pembaca untuk JavaScript Learning Hub
-        </h1>
-        <p className="mt-3 max-w-4xl text-sm leading-7 text-slate-700">
-          JavaScript Learning Hub adalah perpustakaan kecil berisi buku teknis JavaScript. JavaScript
-          Workspace adalah gedung belajarnya: tempat membaca buku, menavigasi materi, dan membangun
-          pemahaman JavaScript secara bertahap.
-        </p>
+    <main className="mx-auto flex min-h-screen max-w-6xl flex-col gap-8 px-4 py-8 md:px-6 md:py-12">
+      <section className="rounded-2xl border border-slate-300 bg-white p-6">
+        <p className="text-sm uppercase tracking-[0.16em] text-slate-500">Halaman Root v2</p>
+        <h1 className="mt-2 text-3xl font-medium tracking-tight text-slate-900">{libraryRoot.title}</h1>
+        <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-700">{libraryRoot.summary}</p>
+        <div className="mt-5 flex flex-wrap gap-3">
+          <Button asChild>
+            <Link href="/racks">Masuk ke Rak v2</Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link href="/legacy">Lihat Arsip v1</Link>
+          </Button>
+        </div>
       </section>
 
-      <section className="border border-slate-300 bg-white p-5">
-        <p className="mb-3 text-sm text-slate-500">Tujuan belajar</p>
-        <ul className="grid gap-2 md:grid-cols-2">
-          {learningReasons.map((item) => (
-            <li key={item} className="border border-slate-200 px-3 py-2 text-sm text-slate-700">
-              {item}
-            </li>
-          ))}
-        </ul>
+      <section className="grid gap-4 md:grid-cols-3">
+        <article className="rounded-2xl border border-slate-300 bg-white p-5">
+          <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Total Rak</p>
+          <p className="mt-2 text-3xl font-medium text-slate-900">{libraryRacks.length}</p>
+        </article>
+        <article className="rounded-2xl border border-slate-300 bg-white p-5">
+          <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Total Buku v2</p>
+          <p className="mt-2 text-3xl font-medium text-slate-900">{libraryBooks.length}</p>
+        </article>
+        <article className="rounded-2xl border border-slate-300 bg-white p-5">
+          <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Total Item v2</p>
+          <p className="mt-2 text-3xl font-medium text-slate-900">{totalItems}</p>
+        </article>
       </section>
 
-      <section className="border border-slate-300 bg-white p-5">
-        <div className="mb-4 flex items-center justify-between">
+      <section className="rounded-2xl border border-slate-300 bg-white p-6">
+        <div className="mb-5 flex items-center justify-between gap-4">
           <div>
-            <p className="text-sm text-slate-500">Katalog Utama</p>
-            <h2 className="text-xl font-medium text-slate-900">JavaScript Learning Hub v2</h2>
+            <p className="text-sm uppercase tracking-[0.16em] text-slate-500">Penjelasan Perpustakaan</p>
+            <h2 className="mt-1 text-2xl font-medium text-slate-900">Isi `README.md` root v2</h2>
+          </div>
+          <p className="text-xs uppercase tracking-[0.16em] text-slate-500">{libraryRoot.readmePath}</p>
+        </div>
+        <article className="reader-prose">{renderMarkdownToElements(rootMarkdown)}</article>
+      </section>
+
+      <section className="rounded-2xl border border-slate-300 bg-white p-6">
+        <div className="mb-5 flex items-center justify-between gap-4">
+          <div>
+            <p className="text-sm uppercase tracking-[0.16em] text-slate-500">Rak Aktif</p>
+            <h2 className="mt-1 text-2xl font-medium text-slate-900">Masuk lewat struktur v2 yang asli</h2>
           </div>
           <Button asChild variant="outline">
-            <Link href="/books">Buka Katalog v2</Link>
+            <Link href="/racks">Lihat Semua Rak</Link>
           </Button>
         </div>
 
-        {libraryBooks.length === 0 ? (
-          <p className="text-sm text-slate-600">
-            Katalog belum tersedia. Pastikan path Learning Hub valid melalui `LEARNING_HUB_PATH`.
-          </p>
-        ) : (
-          <div className="grid gap-3 md:grid-cols-2">
-            {libraryBooks.slice(0, 6).map((book) => (
-              <article key={book.id} className="border border-slate-200 p-4">
-                <p className="text-xs font-medium uppercase tracking-[0.16em] text-slate-500">
-                  {book.rack.code} / {book.code}
-                </p>
-                <h3 className="mt-1 text-lg font-medium text-slate-900">{book.title}</h3>
-                <p className="mt-1 text-sm text-slate-600">{book.rack.title}</p>
-                <p className="mt-1 text-sm text-slate-500">
-                  {book.version} - {book.releaseDate}
-                </p>
-                <p className="mt-3 text-sm text-slate-700">{book.materials.length} materi</p>
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {libraryRacks.map((rack) => {
+            const rackBooks = libraryBooks.filter((book) => book.rack.slug === rack.slug);
+            return (
+              <article key={rack.id} className="rounded-2xl border border-slate-200 p-5">
+                <p className="text-xs uppercase tracking-[0.16em] text-slate-500">{rack.code}</p>
+                <h3 className="mt-2 text-xl font-medium text-slate-900">{rack.title}</h3>
+                <p className="mt-3 text-sm leading-7 text-slate-700">{rack.summary}</p>
+                <p className="mt-4 text-sm text-slate-500">{rackBooks.length} buku</p>
+                <div className="mt-4">
+                  <Button asChild variant="outline">
+                    <Link href={`/racks/${rack.slug}`}>Buka Rak</Link>
+                  </Button>
+                </div>
               </article>
-            ))}
-          </div>
-        )}
+            );
+          })}
+        </div>
       </section>
 
-      <section className="border border-slate-300 bg-white p-5">
-        <div className="mb-4 flex items-center justify-between">
+      <section className="rounded-2xl border border-slate-300 bg-white p-6">
+        <div className="mb-5 flex items-center justify-between gap-4">
           <div>
-            <p className="text-sm text-slate-500">Arsip</p>
-            <h2 className="text-xl font-medium text-slate-900">JavaScript Learning Hub v1</h2>
+            <p className="text-sm uppercase tracking-[0.16em] text-slate-500">Arsip Lama</p>
+            <h2 className="mt-1 text-2xl font-medium text-slate-900">Struktur v1 tetap terpisah</h2>
           </div>
           <Button asChild variant="outline">
             <Link href="/legacy">Buka Arsip v1</Link>
           </Button>
         </div>
-
-        <p className="max-w-4xl text-sm leading-7 text-slate-700">
-          Versi lama tetap tersedia sebagai arsip referensi terpisah. Home tetap fokus ke struktur
-          aktif v2, sementara materi lama bisa dibuka dari halaman khusus.
+        <p className="max-w-3xl text-sm leading-7 text-slate-700">
+          Workspace sekarang tetap menyimpan jalur arsip v1, tetapi jalur utama v2 sudah diarahkan
+          untuk mengikuti struktur perpustakaan yang sebenarnya: root, rak, buku, section, lalu item.
         </p>
 
         <div className="mt-4 grid gap-3 sm:grid-cols-3">
-          <div className="border border-slate-200 p-4">
+          <div className="rounded-2xl border border-slate-200 p-4">
             <p className="text-xs uppercase tracking-widest text-slate-500">Buku Arsip</p>
             <p className="mt-1 text-2xl font-medium text-slate-900">{archiveBooks.length}</p>
           </div>
-          <div className="border border-slate-200 p-4">
+          <div className="rounded-2xl border border-slate-200 p-4">
             <p className="text-xs uppercase tracking-widest text-slate-500">Versi</p>
             <p className="mt-1 text-2xl font-medium text-slate-900">v1</p>
           </div>
-          <div className="border border-slate-200 p-4">
+          <div className="rounded-2xl border border-slate-200 p-4">
             <p className="text-xs uppercase tracking-widest text-slate-500">Status</p>
             <p className="mt-1 text-2xl font-medium text-slate-900">Arsip Aktif</p>
           </div>
-        </div>
-      </section>
-
-      <section className="grid gap-3 sm:grid-cols-3">
-        <div className="border border-slate-300 bg-white p-4">
-          <p className="text-xs uppercase tracking-widest text-slate-500">Total Rak Aktif</p>
-          <p className="mt-1 text-2xl font-medium text-slate-900">{totalRacks}</p>
-        </div>
-        <div className="border border-slate-300 bg-white p-4">
-          <p className="text-xs uppercase tracking-widest text-slate-500">Total Materi</p>
-          <p className="mt-1 text-2xl font-medium text-slate-900">{totalMaterials}</p>
-        </div>
-        <div className="border border-slate-300 bg-white p-4">
-          <p className="text-xs uppercase tracking-widest text-slate-500">Total Buku Aktif</p>
-          <p className="mt-1 text-2xl font-medium text-slate-900">{libraryBooks.length}</p>
         </div>
       </section>
     </main>
